@@ -51,8 +51,13 @@ bool b58tobin(void *bin, size_t *binszp, const char *b58, size_t b58sz)
 	unsigned zerocount = 0;
 	
 	if (!b58sz)
-		b58sz = strlen(b58);
-	
+		// Limit to 36 characters (including terminating NULL)
+		b58sz = strnlen(b58, 36);
+
+	// Length must be 26-35 characters
+	if (b58sz < 26 || b58sz > 35)
+		return false;
+
 	for (i = 0; i < outisz; ++i) {
 		outi[i] = 0;
 	}
